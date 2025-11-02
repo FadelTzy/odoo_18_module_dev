@@ -13,6 +13,7 @@ help:
 	@echo "  psql		postgresql interactive shell"
 	@echo "  logs odoo		logs the odoo container"
 	@echo "  logs db		logs the db container"
+	@echo "  addon <addon_name> 	Restart instance and upgrade addon"
 
 start:
 	${DOCKER_COMPOSE} up -d
@@ -42,4 +43,13 @@ endef
 logs:
 	$(call log_target,$(word 2,$(MAKECMDGOALS)))
 
-.PHONY: start stop restart console psql logs odoo db
+define upgrade_addon
+	$(DOCKER) exec -it $(COTAINER_ODOO) odoo --no-http --db_host=$(COTAINER_DB) -d $(WEB_DB_NAME) -r $(COTAINER_ODOO) -w $(COTAINER_ODOO) -u $(1)
+#        $(DOCKER) exec -it $(COTAINER_ODOO) odoo --no-http --db_host=$(COTAINER_DB) -d $(WEB_DB_NAME) -u $(1)
+
+endef
+
+addon: restart
+	$(call upgrade_addon,$(word 2,$(MAKECMDGOALS)))
+
+.PHONY: start stop restart console psql logs odoo db addon
