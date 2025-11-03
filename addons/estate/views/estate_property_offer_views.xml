@@ -11,6 +11,9 @@
             <list>
                 <field name="partner_id"/>
                 <field name="price"/>
+                <field name="validity"/>
+                <button name="action_accept" string="Confirm" type="object" icon="fa-check"/>
+                <button name="action_refuse" string="Refuse"  type="object" icon="fa-level-down"/>
                 <field name="status"/>
             </list>
         </field>

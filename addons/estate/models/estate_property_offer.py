@@ -1,5 +1,7 @@
 from odoo import models, fields, api
 from datetime import timedelta
+from odoo.exceptions import UserError
+
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "Estate Property Offer"
@@ -35,6 +37,21 @@ class EstatePropertyOffer(models.Model):
         ondelete='set null',
     )
     
+    def action_accept(self):
+        for record in self:
+            if record.property_id.state == "sold":
+                raise UserError("Cannot accept an offer on a sold property.")
+            record.property_id.buyer_id = record.partner_id
+            record.property_id.state = "sold"
+            record.status = "accepted"
+            record.property_id.selling_price = record.price
+        return True    
+
+    def action_refuse(self):
+        for record in self:
+            record.status = "refused"
+        return True	
+
     @api.depends('validity', 'create_date','date_deadline')
     def _compute_date_deadline(self):
         for offer in self:
