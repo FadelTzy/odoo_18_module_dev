@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem id="mahasiswa_menu_root" name="Mahasiswa Management">
+        <menuitem id="mahasiswa_data_first_level_menu" name="Mahasiswa Data">
+            <menuitem id="mahasiswa_data_menu_action" action="mahasiswa_data_action"/>
+        </menuitem>
+    </menuitem>
+</odoo>

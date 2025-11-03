@@ -5,14 +5,35 @@ class EstateProperty(models.Model):
 	_name = 'estate.property'
 	_description = "estate Property"
 
-	name = fields.Char(required=True)
+	name = fields.Char("Title",required=True)
+	user_id = fields.Many2one(
+		comodel_name='res.users',
+		string="Salesman",
+		ondelete='set null',
+		default=lambda self: self.env.user
+	)
+	buyer_id = fields.Many2one(
+		comodel_name='res.partner',
+		string="Buyer",
+		ondelete='set null',
+		copy=False
+	)
+	tag_ids = fields.Many2many(
+		'estate.property.tag',
+		string="Property Tags"
+	)
+	offer_ids = fields.One2many(
+		'estate.property.offer',
+		'property_id',
+		string="Offers"
+	)
 	description = fields.Text()
-	postcode = fields.Char()
-	date_availability = fields.Date(default=lambda self: fields.Datetime.now() + relativedelta(months=3),copy=False)
-	expected_price = fields.Float(required=True)
-	selling_price = fields.Float(readonly=True,copy=False)
-	bedrooms = fields.Integer(default=2)
-	living_area = fields.Integer()
+	postcode = fields.Char("Postcode")
+	date_availability = fields.Date(default=lambda self: fields.Datetime.now() + relativedelta(months=3),copy=False,string="Available From")
+	expected_price = fields.Float(required=True,string="Expected Price")
+	selling_price = fields.Float(readonly=True,copy=False,string="Selling Price")
+	bedrooms = fields.Integer(default=2,string="Bedrooms")
+	living_area = fields.Integer(string="Living Area (sqm)")
 	state = fields.Selection(
                 selection=[
                         ('new','New'),
@@ -34,5 +55,10 @@ class EstateProperty(models.Model):
 			('south','South'),
 			('west','West'),
 		]
+	)
+	type_id = fields.Many2one(
+		comodel_name='estate.property.type',
+		string="Property Type",
+		ondelete='set null'
 	)
 

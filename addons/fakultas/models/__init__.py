@@ -1,0 +1,1 @@
+from . import fakultas_data

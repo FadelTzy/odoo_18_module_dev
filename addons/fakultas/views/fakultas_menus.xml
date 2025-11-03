@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem id="fakultas_menu_root" name="Fakultas Management">
+        <menuitem id="fakultas_data_first_level_menu" name="Fakultas Data">
+            <menuitem id="fakultas_data_menu_action" action="fakultas_data_action"/>
+        </menuitem>
+    </menuitem>
+</odoo>

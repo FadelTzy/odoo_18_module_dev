@@ -1,8 +1,102 @@
 
 <odoo>
 	<record id="estate_property_action" model="ir.actions.act_window">
-		<field name="name">Estate Property</field>
+		<field name="name">Properties</field>
 		<field name="res_model">estate.property</field>
 		<field name="view_mode">list,form</field>
+	</record>
+	<record id="estate_property_view_list" model="ir.ui.view">
+		<field name="name">estate.property.view.list</field>
+		<field name="model">estate.property</field>
+		<field name="arch" type="xml">
+			<list>
+				<field name="name"/>
+				<field name="postcode"/>
+								<field name="bedrooms"/>
+								<field name="living_area"/>
+				<field name="expected_price"/>
+				<field name="selling_price"/>
+				<field name="date_availability"/>
+			</list>
+		</field>
+	</record>
+	<record id="estate_property_view_form" model="ir.ui.view">
+		<field name="name">estate.property.view.form</field>
+		<field name="model">estate.property</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_title">
+						<h1>	<field name="name" /> </h1>
+
+						</div>
+					<group>
+					
+						<group>
+							<field name="postcode" />
+							<field name="date_availability" />
+
+						</group>
+						<group>
+							<field name="expected_price"/>
+							<field name="selling_price"/>
+
+						</group>
+			
+					</group>
+					<notebook>
+						<page string="Description">
+							<group>
+							<field string="Description" name="description"/>
+							<field name="bedrooms"/>
+							<field name="living_area"/>
+							<field name="facades"/>
+							<field name="garage"/>
+							<field name="garden"/>
+							<field name="garden_area"/>
+							<field name="garden_orientation"/>
+							<field name="type_id"/>
+							<field name="tag_ids" widget="many2many_tags"/>
+							</group>
+						</page>
+								<page string="Information Sales">
+							<group>
+								<field string="Salesperson" name="user_id"/>
+								<field name="buyer_id" string="Customer"/>
+							</group>
+						</page>
+								<page string="Offer Details">
+								<field name="offer_ids"/>
+						</page>
+					</notebook>
+		
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="view_estate_property_search" model="ir.ui.view">
+		<field name="name">view.estate.property.search</field>
+		<field name="model">estate.property</field>
+		<field name="arch" type="xml">
+			<search string="Estate Property Search">
+				<field name="name"/>
+				<field name="postcode"/>
+				<field name="date_availability"/>
+				<field name="expected_price"/>
+				<field name="selling_price"/>
+				<group string="Status">
+				<filter name="state" string="New" domain="[('state','=','new')]"/>
+				<filter name="state" string="Sold" domain="[('state','=','sold')]"/>
+			</group>
+			<group string="Features">
+				<filter name="garden" string="With Garden" domain="[('garden','=',True)]"/>
+				<filter name="garage" string="With Garage" domain="[('garage','=',True)]"/>
+			</group>
+
+				<!-- <filter string="Available" domain="[('state','=','available')]"/> -->
+				<!-- <filter string="Sold" domain="[('state','=','sold')]"/> -->
+				<!-- <filter string="Canceled" domain="[('state','=','canceled')]"/> -->
+			</search>
+		</field>
 	</record>
 </odoo>

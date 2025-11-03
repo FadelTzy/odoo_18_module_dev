@@ -1,0 +1,7 @@
+<odoo>
+    <record id="mahasiswa_data_action" model="ir.actions.act_window">
+        <field name="name">Data Mahasiswa</field>
+        <field name="res_model">mahasiswa.data</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

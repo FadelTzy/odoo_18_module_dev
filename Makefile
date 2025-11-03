@@ -44,7 +44,7 @@ logs:
 	$(call log_target,$(word 2,$(MAKECMDGOALS)))
 
 define upgrade_addon
-	$(DOCKER) exec -it $(COTAINER_ODOO) odoo --no-http --db_host=$(COTAINER_DB) -d $(WEB_DB_NAME) -r $(COTAINER_ODOO) -w $(COTAINER_ODOO) -u $(1)
+	$(DOCKER) exec -it $(COTAINER_ODOO) odoo --no-http --db_host=$(COTAINER_DB) -d $(WEB_DB_NAME) -r $(COTAINER_ODOO) -w $(COTAINER_ODOO) -u $(1) --dev xml
 #        $(DOCKER) exec -it $(COTAINER_ODOO) odoo --no-http --db_host=$(COTAINER_DB) -d $(WEB_DB_NAME) -u $(1)
 
 endef
