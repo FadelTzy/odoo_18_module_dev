@@ -1,4 +1,4 @@
-from odoo import fields,models
+from odoo import fields,models,api
 from dateutil.relativedelta import relativedelta
 
 class EstateProperty(models.Model):
@@ -61,4 +61,31 @@ class EstateProperty(models.Model):
 		string="Property Type",
 		ondelete='set null'
 	)
+	total_area = fields.Float(compute='_compute_total_area', string="Total Area (sqm)")
+	best_price = fields.Float(compute='_compute_best_price', string="Best Offer Price")	
+	@api.depends('living_area','garden_area')
+	def _compute_total_area(self):
+		for record in self:
+			record.total_area = record.living_area + record.garden_area
+	
+	@api.depends('offer_ids')
+	def _compute_best_price(self):
+		for record in self:
+			# Filter hanya offer yang status-nya 'accepted'
+			accepted_offers = record.offer_ids.filtered(lambda o: o.status == 'accepted')
 
+			if accepted_offers:
+				record.best_price = max(accepted_offers.mapped('price'))
+			else:
+				record.best_price = 0.0
+
+	@api.onchange('garden')
+	def _onchange_garden(self):
+		if self.garden == True:
+			self.garden_area = 10
+			self.garden_orientation = 'north'
+		
+		
+		else:
+			self.garden_area = 0
+			self.garden_orientation = False
