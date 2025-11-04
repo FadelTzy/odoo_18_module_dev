@@ -44,11 +44,16 @@ class EstateProperty(models.Model):
 			('cancelled','Cancelled')
                 ], default='new', copy=False, required=True
         )
+	_sql_constraints = [
+		('expected_price_positive','CHECK(expected_price > 0)','The expected price must be positive.'),	
+		('selling_price_positive','CHECK(selling_price >= 0)','The selling price must be non-negative.'),
+	]
 	facades = fields.Integer()
 	active = fields.Boolean(default=True)
 	garage = fields.Boolean()
 	garden = fields.Boolean()
 	garden_area = fields.Integer()
+      
 	garden_orientation = fields.Selection(
 		selection=[
 			('north','North'), 

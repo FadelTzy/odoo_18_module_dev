@@ -1,7 +1,7 @@
 from odoo import models, fields, api
 from datetime import timedelta
 from odoo.exceptions import UserError
-
+from odoo.exceptions import ValidationError
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "Estate Property Offer"
@@ -36,9 +36,20 @@ class EstatePropertyOffer(models.Model):
         string="Partner",
         ondelete='set null',
     )
-    
+    # _sql_constraints = [
+    #     ('offer_price_positive','CHECK(price > 0)','The offer price must be positive.'),	
+    # ]
+       
+    @api.constrains('price')
+    def _check_offer_price_positive(self):
+        for record in self:
+            if record.price <= 0:
+                raise ValidationError("The offer price must be positive.")
+                
     def action_accept(self):
         for record in self:
+            if record.property_id and record.price < record.property_id.expected_price * 0.9:
+                raise ValidationError("The offer price must be at least 90% of the expected price.")
             if record.property_id.state == "sold":
                 raise UserError("Cannot accept an offer on a sold property.")
             record.property_id.buyer_id = record.partner_id
