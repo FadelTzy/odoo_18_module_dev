@@ -25,6 +25,8 @@ services:
       - ./var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata
     networks:
       - odoo-network
+    ports:
+      - "5432:5432"
 
 networks:
   odoo-network:

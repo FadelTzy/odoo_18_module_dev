@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 class EstateProperty(models.Model):
 	_name = 'estate.property'
 	_description = "estate Property"
-
+	_order = 'id desc'
 	name = fields.Char("Title",required=True)
 	user_id = fields.Many2one(
 		comodel_name='res.users',

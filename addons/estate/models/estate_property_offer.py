@@ -5,6 +5,7 @@ from odoo.exceptions import ValidationError
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "Estate Property Offer"
+    _order = 'price desc'
 
     price = fields.Float(required=True)
     validity = fields.Integer(
@@ -12,6 +13,7 @@ class EstatePropertyOffer(models.Model):
         required=True,
         default=7
     )
+
     date_deadline = fields.Date(
         compute='_compute_date_deadline',
         inverse='_set_date_deadline',
@@ -36,6 +38,12 @@ class EstatePropertyOffer(models.Model):
         string="Partner",
         ondelete='set null',
     )
+    property_type_id = fields.Many2one(
+        "estate.property.type",
+        string="Property Type",
+        related="property_id.type_id",
+        store=True
+    )
     # _sql_constraints = [
     #     ('offer_price_positive','CHECK(price > 0)','The offer price must be positive.'),	
     # ]
@@ -45,7 +53,7 @@ class EstatePropertyOffer(models.Model):
         for record in self:
             if record.price <= 0:
                 raise ValidationError("The offer price must be positive.")
-                
+
     def action_accept(self):
         for record in self:
             if record.property_id and record.price < record.property_id.expected_price * 0.9:

@@ -3,17 +3,20 @@
         <field name="name">Properties Offer</field>
         <field name="res_model">estate.property.offer</field>
         <field name="view_mode">list,form</field>
+        <field name="domain">[('property_type_id', '=', active_id)]</field>
+
     </record>
     <record id="estate_property_offer_view_list" model="ir.ui.view">
         <field name="name">estate.property.offer.view.list</field>
         <field name="model">estate.property.offer</field>
         <field name="arch" type="xml">
-            <list>
+            <list default_order="price asc" decoration-success="status == 'accepted'" decoration-danger="status == 'refused'">
+                 <field name="property_id"/>
                 <field name="partner_id"/>
                 <field name="price"/>
                 <field name="validity"/>
-                <button name="action_accept" string="Confirm" type="object" icon="fa-check"/>
-                <button name="action_refuse" string="Refuse"  type="object" icon="fa-level-down"/>
+                <button name="action_accept" string="Confirm" invisible="status == 'accepted'" type="object" icon="fa-check"/>
+                <button name="action_refuse" string="Refuse"  invisible="status == 'accepted'" type="object" icon="fa-level-down"/>
                 <field name="status"/>
             </list>
         </field>
@@ -22,7 +25,7 @@
         <field name="name">estate.property.offer.view.form</field>
         <field name="model">estate.property.offer</field>
         <field name="arch" type="xml">
-            <form>
+            <form >
                 <sheet>
                     <group>
                         <field name="partner_id"/>

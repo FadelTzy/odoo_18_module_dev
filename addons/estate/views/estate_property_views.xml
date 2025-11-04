@@ -9,15 +9,17 @@
 		<field name="name">estate.property.view.list</field>
 		<field name="model">estate.property</field>
 		<field name="arch" type="xml">
-			<list>
-				<field name="name"/>
-				<field name="postcode"/>
-								<field name="bedrooms"/>
-								<field name="living_area"/>
-				<field name="expected_price"/>
-				<field name="selling_price"/>
-				<field name="date_availability"/>
-			</list>
+	        <list editable="bottom" open_form_view="state != 'sold'" decoration-muted="state == 'sold'" decoration-success="state != 'sold'">
+            <field name="name" />
+            <field name="postcode" readonly="1"/>
+            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            <field name="type_id"/>
+            <field name="bedrooms"/>
+            <field name="living_area"/>
+            <field name="expected_price" readonly="1"/>
+            <field name="selling_price" readonly="1"/>
+            <field name="date_availability" optional="hide"/>
+        </list>
 		</field>
 	</record>
 	<record id="estate_property_view_form" model="ir.ui.view">
@@ -26,9 +28,10 @@
 		<field name="arch" type="xml">
 			<form>
 			    <header>
-					<button name="action_sold" type="object" string="Sold"/>
-					<button name="action_cancel" type="object" string="Cancel"/>
+					<button name="action_sold" type="object" string="Sold" invisible="state == 'sold' or state == 'cancelled'"/>
+					<button name="action_cancel" type="object" invisible="state == 'sold' or state == 'cancelled'" string="Cancel"/>
 					<button type="action" name="%(estate_property_action)d" string="Back"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,sold,cancelled"/>
 
 				</header>
 				<sheet>
@@ -39,7 +42,7 @@
 					<group>
 					
 						<group>
-							<field name="state" />
+							<field name="state" widget="selection" invisible="state == 'sold'" placeholder="Select State"/>
 							<field name="postcode" />
 							<field name="date_availability" />
 
@@ -60,10 +63,10 @@
 							<field name="facades"/>
 							<field name="garage"/>
 							<field name="garden"/>
-							<field name="garden_area"/>
-							<field name="garden_orientation"/>
-							<field name="type_id"/>
-							<field name="tag_ids" widget="many2many_tags"/>
+							<field name="garden_area" invisible="garden == False"/>
+							<field name="garden_orientation" invisible="garden == False"/>
+							<field name="type_id" options="{'no_create':true,'no_open':true}"/>
+							<field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
 							<field name="total_area"/>
 							</group>
 						</page>
@@ -74,7 +77,7 @@
 							</group>
 						</page>
 								<page string="Offer Details">
-								<field name="offer_ids"/>
+								<field name="offer_ids" readonly="state == 'sold'"/>
 						</page>
 					</notebook>
 		
