@@ -85,3 +85,16 @@ class EstatePropertyOffer(models.Model):
                 base_date = offer.create_date.date() if offer.create_date else fields.Date.today()
                 delta = offer.date_deadline - base_date
                 offer.validity = delta.days
+    
+    @api.model
+    def create(self, vals):
+        property_id = vals.get('property_id')
+        property_record = self.env['estate.property'].browse(property_id)
+        existing_offers = self.search([('property_id', '=', property_id)])
+        for offer in existing_offers:
+            if vals.get('price') and vals['price'] <= offer.price:
+                raise ValidationError("New offer price must be higher than existing offers for the same property.")
+        
+        property_record.state = 'offer_received'
+
+        return super(EstatePropertyOffer, self).create(vals)

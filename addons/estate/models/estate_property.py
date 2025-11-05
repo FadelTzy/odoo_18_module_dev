@@ -111,4 +111,9 @@ class EstateProperty(models.Model):
 			self.garden_area = 0
 			self.garden_orientation = False
 	
+	@api.ondelete(at_uninstall=False)
+	def _check_if_can_be_deleted(self):
+		for record in self:
+			if record.state not in ['new','cancelled']:
+				raise UserError("Only properties in 'New' or 'Cancelled' state can be deleted.")
    

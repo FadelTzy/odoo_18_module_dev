@@ -4,6 +4,7 @@
 		'base',
 		],
 	'data':[
+		'views/inherited_res_user_views.xml',
 		'views/estate_property_offer_views.xml',
 		'views/estate_property_tag_views.xml',
 		'views/estate_property_type_views.xml',
